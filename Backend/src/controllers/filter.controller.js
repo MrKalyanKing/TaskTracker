@@ -36,9 +36,29 @@ const FilterTask=async(req,res)=>{
         query.priority = { $regex: `^${priority}$`, $options: "i" };
     }
 
-    const task=await taskModel.find(query)
+    //pagination logic
+
+    const page=parseInt(req.query.page) ||1
+    const limit=Math.min(parseInt(req.query.limit)||10,20)
+    const skip=(page -1) * limit
+
+    if(page < 1 || limit <1){
+        return res.status(400).json({
+            message:"Invalid page or limit"
+        })
+    }
+
+    //total pages calculation
+    const total=await taskModel.countDocuments({user:req.user._id})
+
+    const totalPages=Math.ceil(total/limit)
+
+
+    const task=await taskModel.find(query).skip(skip).limit(limit).sort({createdAt:-1})
+
     res.status(200).json({
       message: "Filtered tasks fetched",
+      total,totalPages,page,
       task,
     });
 
