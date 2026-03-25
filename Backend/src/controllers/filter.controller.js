@@ -47,3 +47,5 @@ const FilterTask=async()=>{
         })
     }
 }
+
+export {FilterTask}
