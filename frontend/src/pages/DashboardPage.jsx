@@ -5,7 +5,7 @@ import Navbar from '../components/Navbar/Navbar'
 const DashboardPage = () => {
   return (
     <div>
-        <Navbar/>
+        {/* <Navbar/> */}
         <Dashboard/>
 
     </div>
