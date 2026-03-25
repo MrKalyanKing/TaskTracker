@@ -98,6 +98,36 @@ const updateTask=async(req,res)=>{
 
 //deleting the task
 
+const deleteTask=async(req,res)=>{
+    try{
+    const {id}=req.params
+
+        console.log(id)
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(400).json({
+            message:"Invalid ID"
+        })
+    }
+
+    const deletedOne=await taskModel.findByIdAndDelete(id)
+
+     return res.status(200).json({
+            message:"Task is Deleted sucessfully",
+            deletedOne
+    })
+
+    }catch(err){
+        return res.status(400).json({
+            message:"Internal server error",
+            err:err.message
+        })
+    }
+
+}
+
+
+//view all task
+
 
 
 
