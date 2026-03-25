@@ -1,7 +1,7 @@
 import taskModel from "../models/task.model.js"
 
 
-const FilterTask=async(req,res)=>{
+const FilterTask=async(req,res,next)=>{
 
     try{
     const {status,priority,title}=req.query
@@ -9,21 +9,25 @@ const FilterTask=async(req,res)=>{
     const allowedStatus=["todo","in-progress","done"]
 
     if(status && !allowedStatus.includes(status)){
-         return res.status(400).json({
-            message:" status can be either todo ,in-progress,done"
-        })
+         const err=new Error("status can be either todo ,in-progress,done")
+         err.status=400
+         return next(err)
     }
 
     const allowedPriority=["low","medium","high"]
 
     if(priority && !allowedPriority.includes(priority)){
-         return res.status(400).json({
-            message:" priority can be either low,medium,high"
-        })
+        const err=new Error("priority can be either low,medium,high")
+         err.status=400
+         return next(err)
     }
+
+
     const query={
         user:req.user._id
     }
+
+
     if(title){
         query.title={$regex :`^${title}$`,$options:"i"}
     }
@@ -38,14 +42,14 @@ const FilterTask=async(req,res)=>{
 
     //pagination logic
 
-    const page=parseInt(req.query.page) ||1
-    const limit=Math.min(parseInt(req.query.limit)||10,20)
+    const page=parseInt(req.query.page) 
+    const limit=Math.min(parseInt(req.query.limit),20)
     const skip=(page -1) * limit
 
     if(page < 1 || limit <1){
-        return res.status(400).json({
-            message:"Invalid page or limit"
-        })
+        const err=new Error("Invalid pages or number")
+        err.status=400
+        return next(err)
     }
 
     //total pages calculation
@@ -61,11 +65,10 @@ const FilterTask=async(req,res)=>{
       total,totalPages,page,
       task,
     });
+    
 
     }catch(err){
-        res.status(400).json({
-            message:err.message
-        })
+        next(err)
     }
 }
 

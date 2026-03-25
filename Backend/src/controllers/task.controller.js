@@ -3,31 +3,35 @@ import taskModel from "../models/task.model.js"
 import jwt from "jsonwebtoken"
 
 // task creating
-const taskCreate=async(req,res)=>{
+const taskCreate=async(req,res,next)=>{
 
     try{
 
     const {title,description,status,priority,dueDate}=req.body
 
     if(!title || !description || !status || !priority || !dueDate){
-        return res.status(400).json({
-            message:"All Fields are required"
-        })
+        const err=new Error("All fields are required")
+        err.status=400
+        return next(err)
     }
     
     const allowedStatus=["todo","in-progress","done"]
 
     if(status && !allowedStatus.includes(status)){
-         return res.status(400).json({
-            message:" status can be either todo ,in-progress,done"
-        })
+
+        const err=new Error("status can be either todo ,in-progress,done")
+        err.status=400
+        return next(err)
     }
 
     const allowedPriority=["low","medium","high"]
+
     if(priority && !allowedPriority.includes(priority)){
-         return res.status(400).json({
-            message:" priority can be either low,medium,high"
-        })
+
+        const err=new Error("priority can be either low,medium,high")
+        err.status=400
+        return next(err)
+
     }
     const task=await taskModel({
         user:req.user._id,
@@ -42,35 +46,32 @@ const taskCreate=async(req,res)=>{
 
     return res.status(200).json({
         message:"Task is created",
-        task:{
-            id:task._id,
-            name:task.title,
-            desc:title.description,
-            status:task.status,
-            priority:task.priority,
-            due:task.dueDate
-        }
+        task
     })
 
 
     }catch(err){
-         return res.status(400).json({
-            message:err.message
-        })
+        next(err)
     }
 }
 
 
 // task updating
 
-const updateTask=async(req,res)=>{
+const updateTask=async(req,res,next)=>{
     try{
     const {id}=req.params
+  
 
     // console.log(id)
     if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ message: "Invalid ID" });
+
+        const err=new Error("InValid ID")
+        err.status=400
+        return next(err)
+        
     }
+
     const updatedTasks=await taskModel.findByIdAndUpdate(
         id,
         req.body,
@@ -78,35 +79,37 @@ const updateTask=async(req,res)=>{
     )
     
     if(!updatedTasks){
-        return res.status(400).json({
-            message:"Task is not found "
-        })
+        const err=new Error("Task is Not Found")
+        err.status=404
+        return next(err)
     }
+
 
     return res.status(200).json({
         message:"Task is Updated Succesfully",
         updateTask
     })
 
+
     }catch(err){
-         return res.status(400).json({
-            message:"Internal server arror",
-            err:err.message
-        })
+         next(err)
     }
 }
 
 //deleting the task
 
-const deleteTask=async(req,res)=>{
+const deleteTask=async(req,res,next)=>{
+
     try{
+
     const {id}=req.params
 
-        console.log(id)
+        
     if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(400).json({
-            message:"Invalid ID"
-        })
+        const err=new Error("Invalid ID")
+        err.status=400
+        return next(err)
+        
     }
 
     const deletedOne=await taskModel.findByIdAndDelete(id)
@@ -117,39 +120,40 @@ const deleteTask=async(req,res)=>{
     })
 
     }catch(err){
-        return res.status(400).json({
-            message:"Internal server error",
-            err:err.message
-        })
+        next(err)
     }
 
 }
 
 
 //view all task
-const ViewAllTask=async(req,res)=>{
+const ViewAllTask=async(req,res,next)=>{
     try{
     const token= req.cookies.token || req.headers.Authorization?.split(" ")[1]
 
     //pagination 
-    const page=parseInt(req.query.page)||1
-    const limit=Math.min(parseInt(req.query.limit)||10,40)
+    const page=parseInt(req.query.page)
+    const limit=Math.min(parseInt(req.query.limit),40)
     const skip=(page -1) * limit
 
+  
     if(page  < 1  || limit <1){
-        return res.status(400).json({
-            message:"Invalid Page number or limit"
-        })
+        const err=new Error("Invalid Page number or limit")
+        err.status=400
+        return next(err)
+        
     }
 
     if(!token){
-        return res.status(401).json({
-            message:"Unauthorized access"
-        })
+        const err=new Error("Unauthorized access")
+        err.status=401
+        return next(err)
     }
+
     const decoded=jwt.verify(token,process.env.JWT_SECRET)
 
     //counting total pages
+    
     const total= await taskModel.countDocuments({user:decoded.userId})
 
     const totalPages=Math.ceil(total/limit)
@@ -160,11 +164,9 @@ const ViewAllTask=async(req,res)=>{
         message:"task are fetched sucessfully",
         total, page,totalPages,task
     })
+
     }catch(err){
-        return res.status(400).json({
-            message:"Internal server error",
-            err:err.message
-        })
+        next(err)
     }
 }
 

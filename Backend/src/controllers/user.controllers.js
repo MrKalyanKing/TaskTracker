@@ -2,21 +2,23 @@ import validator from "validator"
 import userModel from "../models/user.model.js"
 import cookie from "cookie-parser"
 import jwt from "jsonwebtoken"
-const UserRegsiter=async(req,res)=>{
+
+const UserRegsiter=async(req,res,next)=>{
+    
     try{
     const {name,email,password}=req.body
 
     if(!name,!email,!password){
-        return res.status(400).json({
-            message:"All Fields are required"
-        })
+        const err=new Error("All fields are required")
+        err.status=400
+        return next(err)
     }
 
     if(!validator.isEmail(email)){
 
-        return res.status(400).json({
-            message:"Enter valid Email"
-        })
+        const err=new Error("Enter Valid Email")
+        err.status=400
+        return next(err)
     }   
 
     const user=await userModel.findOne({email:email})
@@ -43,38 +45,37 @@ const UserRegsiter=async(req,res)=>{
     })
 
     }catch(err){
-        return res.status(400).json({
-            message:err.message,
-            
-        })
+       next(err)
     }
 }
 
 
-const userLogin=async(req,res)=>{
+const userLogin=async(req,res,next)=>{
     try{
     const {email,password}=req.body ||{}
 
     if(!email,!password){
-        return res.status(401).json({
-            message:"All Fields are reqiured"
-        })
+       const err=new Error("All Fields are required")
+       err.status=400
+       return next(err)
     }
 
     const user=await userModel.findOne({email}).select("+password")
 
     if(!user){
-        return res.status(401).json({
-            message:"User is Not Exists "
-        })
+        const err=new Error("User is Already Exists")
+        err.status=409
+        return next(err)
     }
+
+
 
     const isValidPass= await user.comparePassword(password)
 
      if (!isValidPass) {
-        return res.status(401).json({
-            message: "Email or password is INVALID"
-        })
+        const err=new Error("Password is Invalid")
+        err.status=400
+        return next(err)
     }
 
     const token=jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:"2d"})
@@ -92,9 +93,7 @@ const userLogin=async(req,res)=>{
     
 
     }catch(err){
-        return res.status(400).json({
-            message:err.message
-        })
+       next(err)
     }
 
 }
