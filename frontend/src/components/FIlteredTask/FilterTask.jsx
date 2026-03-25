@@ -67,60 +67,8 @@ const FilterTask = () => {
               Mark Complete
             </button>
           </div>
-        </div>
-
-        {/* SIDE CARD */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border-l-4 border-orange-400">
-          <span className="text-xs text-gray-400">TODO</span>
-
-          <h3 className="font-semibold mt-2 mb-2">
-            Brand Identity Refresh
-          </h3>
-
-          <p className="text-gray-500 text-sm mb-4">
-            Exploration of new color tokens and editorial typography.
-          </p>
-
-          <p className="text-xs text-gray-400">Tomorrow</p>
-        </div>
-
-        {/* SMALL CARD */}
-        <div className="bg-white p-4 rounded-xl shadow-sm">
-          <span className="text-xs text-blue-500">IN PROGRESS</span>
-
-          <h3 className="font-semibold mt-2 mb-2">
-            API Documentation
-          </h3>
-
-          <p className="text-gray-500 text-sm mb-4">
-            Finalizing the Swagger definitions.
-          </p>
-
-          <div className="w-full bg-gray-200 h-2 rounded-full">
-            <div className="bg-purple-600 h-2 rounded-full w-[65%]"></div>
-          </div>
-
-          <p className="text-xs text-gray-400 mt-2">65% Progress</p>
-        </div>
-
-        {/* DONE CARD */}
-        <div className="bg-white p-4 rounded-xl shadow-sm">
-          <span className="text-xs text-gray-400">DONE</span>
-
-          <h3 className="font-semibold mt-2 mb-2">
-            Investor Slide Deck
-          </h3>
-
-          <p className="text-gray-500 text-sm">
-            Completed by Alex
-          </p>
-        </div>
-
-        {/* ADD TASK */}
-        <div className="bg-gray-50 border-2 border-dashed rounded-xl flex items-center justify-center text-gray-400">
-          + Add New Task
-        </div>
-
+        </div>       
+        
       </div>
     </div>
   )
