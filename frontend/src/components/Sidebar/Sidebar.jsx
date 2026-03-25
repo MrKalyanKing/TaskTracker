@@ -6,9 +6,11 @@ import {
   CheckSquare,
   Menu
 } from "lucide-react"
+import TaskModal from "../Modals/TaskModal";
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false)
+   const [open, setOpen] = useState(false);
 
   return (
     <div
@@ -56,12 +58,16 @@ const Sidebar = () => {
 
       {/* BUTTON */}
       <button
+        onClick={()=>setOpen(true)}
         className={`mt-10 w-full bg-purple-600 text-white py-2 rounded-md ${
           collapsed ? "px-2" : ""
         }`}
       >
         {collapsed ? "+" : "+ Create New Task"}
       </button>
+
+      {/* modal */}
+      {open && <TaskModal onClose={() => setOpen(false)} />}
     </div>
   )
 }
