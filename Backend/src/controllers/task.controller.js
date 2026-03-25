@@ -131,13 +131,25 @@ const ViewAllTask=async(req,res)=>{
     try{
     const token= req.cookies.token || req.headers.Authorization?.split(" ")[1]
 
+    const page=parseInt(req.query.page)||1
+    const limit=parseInt(req.query.limit) ||10
+    const skip=(page -1) * limit
+
+    if(page  < 1 )
+
     if(!token){
         return res.status(401).json({
             message:"Unauthorized access"
         })
     }
     const decoded=jwt.verify(token,process.env.JWT_SECRET)
-    const task=await taskModel.find({user:decoded.userId})
+
+    //counting total pages
+    const total= await taskModel.countDocumets({user:decoded.userId})
+
+    const totalPages=Math.ceil(total/limit)
+
+    const task=await taskModel.find({user:decoded.userId}).skip(skip).limit(limit)
 
     return res.status(200).json({
         message:"task are fetched sucessfully",

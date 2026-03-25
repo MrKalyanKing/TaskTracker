@@ -1,7 +1,7 @@
-import taskModel from "../models/task.model"
+import taskModel from "../models/task.model.js"
 
 
-const FilterTask=async()=>{
+const FilterTask=async(req,res)=>{
 
     try{
     const {status,priority,title}=req.query
@@ -25,14 +25,15 @@ const FilterTask=async()=>{
         user:req.user._id
     }
     if(title){
-        query.title=title
+        query.title={$regex :`^${title}$`,$options:"i"}
     }
 
-    if(status){
-        query.status=status
+   if (status) {
+        query.status = { $regex: `^${status}$`, $options: "i" };
     }
-    if(priority){
-        query.status=priority
+
+    if (priority) {
+        query.priority = { $regex: `^${priority}$`, $options: "i" };
     }
 
     const task=await taskModel.find(query)

@@ -2,6 +2,7 @@ import express from "express"
 import userRouter from "./routes/user.route.js";
 import cookieParser from "cookie-parser";
 import taskRouter from "./routes/task.route.js";
+import filterRouter from "./routes/filter.route.js";
 
 
 const app=express()
@@ -16,6 +17,8 @@ app.use(cookieParser())
 app.use("/api/user",userRouter)
 
 app.use("/api/task",taskRouter)
+
+app.use("/api/",filterRouter)
 
 app.get('/',(req,res)=>{
     res.send("Hello")
