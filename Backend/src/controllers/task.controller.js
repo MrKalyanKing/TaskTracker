@@ -1,7 +1,8 @@
+import mongoose from "mongoose"
 import taskModel from "../models/task.model.js"
+import jwt from "jsonwebtoken"
 
-
-
+// task creating
 const taskCreate=async(req,res)=>{
 
     try{
@@ -60,4 +61,45 @@ const taskCreate=async(req,res)=>{
 }
 
 
-export {taskCreate}
+// task updating
+
+const updateTask=async(req,res)=>{
+    try{
+    const {id}=req.params
+
+    // console.log(id)
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid ID" });
+    }
+    const updatedTasks=await taskModel.findByIdAndUpdate(
+        id,
+        req.body,
+        {returnDocument:"after"}
+    )
+    
+    if(!updatedTasks){
+        return res.status(400).json({
+            message:"Task is not found "
+        })
+    }
+
+    return res.status(200).json({
+        message:"Task is Updated Succesfully",
+        updateTask
+    })
+
+    }catch(err){
+         return res.status(400).json({
+            message:"Internal server arror",
+            err:err.message
+        })
+    }
+}
+
+//deleting the task
+
+
+
+
+
+export {taskCreate,updateTask,deleteTask,ViewAllTask}
