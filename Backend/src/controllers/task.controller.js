@@ -131,11 +131,16 @@ const ViewAllTask=async(req,res)=>{
     try{
     const token= req.cookies.token || req.headers.Authorization?.split(" ")[1]
 
+    //pagination 
     const page=parseInt(req.query.page)||1
-    const limit=parseInt(req.query.limit) ||10
+    const limit=Math.min(parseInt(req.query.limit)||10,40)
     const skip=(page -1) * limit
 
-    if(page  < 1 )
+    if(page  < 1  || limit <1){
+        return res.status(400).json({
+            message:"Invalid Page number or limit"
+        })
+    }
 
     if(!token){
         return res.status(401).json({
@@ -145,15 +150,15 @@ const ViewAllTask=async(req,res)=>{
     const decoded=jwt.verify(token,process.env.JWT_SECRET)
 
     //counting total pages
-    const total= await taskModel.countDocumets({user:decoded.userId})
+    const total= await taskModel.countDocuments({user:decoded.userId})
 
     const totalPages=Math.ceil(total/limit)
 
-    const task=await taskModel.find({user:decoded.userId}).skip(skip).limit(limit)
+    const task=await taskModel.find({user:decoded.userId}).skip(skip).limit(limit).sort({createdAt:-1})
 
     return res.status(200).json({
         message:"task are fetched sucessfully",
-        task
+        total, page,totalPages,task
     })
     }catch(err){
         return res.status(400).json({
