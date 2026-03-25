@@ -1,14 +1,13 @@
-import { Children, createContext } from "react";
+import { createContext } from "react";
 
+export const AppContext = createContext();
 
-export const UseContext=createContext()
+export const CreateContext = ({ children }) => {
+  const url = "http://localhost:8000/api";
 
-export const CreateContext=()=>{
-
-    const url="sjbdvjk"
-    return(
-    <UseContext.Provider value={url}>
-        {Children}
-    </UseContext.Provider>
-    )
-}
+  return (
+    <AppContext.Provider value={url}>
+      {children}
+    </AppContext.Provider>
+  );
+};

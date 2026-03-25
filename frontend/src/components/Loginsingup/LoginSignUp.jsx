@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import { useContext } from 'react'
+import { AppContext } from '../Context/Context'
+import axios from "axios"
+import { useNavigate } from 'react-router-dom'
 
 const LoginSignUp = () => {
   const [toggle, setToggle] = useState('signup')
 
+  const url=useContext(AppContext)
+  const navigate=useNavigate()
   const [data,setData]=useState({
     name:"",
     email:"",
@@ -18,12 +24,27 @@ const LoginSignUp = () => {
   useEffect(()=>{
     console.log(data)
   })
-  const handleSubmit = (e) => {
+
+  const handleSubmit =async (e,req,res) => {
     e.preventDefault()
-    if(toggle === "login"){
-        console.log("login Data",data.email,data.password)
+    try{
+    if(toggle === "signup"){
+        const res= await axios.post(`${url}/user/register`,data)
+        console.log(res.data)
+        navigate('/dashboard')
+    }else{
+        const {email,password}=data
+        const res=await axios.post(`${url}/user/login`,{email,password},
+        {
+            withCredentials:true
+        }
+        )
+        navigate('/dashboard')
+        console.log("user loggedin")
     }
-    
+    }catch(err){
+        console.log(err.message)
+    }
     
   }
 

@@ -38,7 +38,7 @@ const UserRegsiter=async(req,res,next)=>{
     userData.save()
 
     const token=jwt.sign({userId:userData._id},process.env.JWT_SECRET,{expiresIn:"2d"})
-    res.cookie("token",token)
+   res.cookie("token", token, { httpOnly: true });
 
     return res.status(200).json({
             message:"User is Register succesfully",userData,token
@@ -53,6 +53,7 @@ const UserRegsiter=async(req,res,next)=>{
 const userLogin=async(req,res,next)=>{
     try{
     const {email,password}=req.body ||{}
+    console.log(email,password)
 
     if(!email,!password){
        const err=new Error("All Fields are required")
@@ -80,7 +81,7 @@ const userLogin=async(req,res,next)=>{
 
     const token=jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:"2d"})
 
-    res.cookie("token",token)
+   res.cookie("token", token, { httpOnly: true });
     return res.status(200).json({
             message:"User LoggedIn",
             user:{

@@ -6,7 +6,7 @@ const userRouter =express.Router()
 
 userRouter.post('/register',UserRegsiter)
 
-userRouter.post("/login",authMiddleware,userLogin)
+userRouter.post("/login",userLogin)
 
 export default userRouter
 

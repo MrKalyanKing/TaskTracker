@@ -3,14 +3,17 @@ import userRouter from "./routes/user.route.js";
 import cookieParser from "cookie-parser";
 import taskRouter from "./routes/task.route.js";
 import filterRouter from "./routes/filter.route.js";
-
+import cors from "cors"
 
 const app=express()
 
 //middlewares
 app.use(express.json())
 app.use(cookieParser())
-
+app.use(cors({
+  origin: "http://localhost:5173", // your frontend URL
+  credentials: true
+}));
 
 
 //user routes
