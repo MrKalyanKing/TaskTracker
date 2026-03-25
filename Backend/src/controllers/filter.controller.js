@@ -2,6 +2,8 @@ import taskModel from "../models/task.model"
 
 
 const FilterTask=async()=>{
+
+    try{
     const {status,priority,title}=req.query
 
     const allowedStatus=["todo","in-progress","done"]
@@ -19,8 +21,29 @@ const FilterTask=async()=>{
             message:" priority can be either low,medium,high"
         })
     }
+    const query={
+        user:req.user._id
+    }
+    if(title){
+        query.title=title
+    }
 
     if(status){
-        
+        query.status=status
+    }
+    if(priority){
+        query.status=priority
+    }
+
+    const task=await taskModel.find(query)
+    res.status(200).json({
+      message: "Filtered tasks fetched",
+      task,
+    });
+
+    }catch(err){
+        res.status(400).json({
+            message:err.message
+        })
     }
 }
