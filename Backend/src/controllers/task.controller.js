@@ -127,7 +127,29 @@ const deleteTask=async(req,res)=>{
 
 
 //view all task
+const ViewAllTask=async(req,res)=>{
+    try{
+    const token= req.cookies.token || req.headers.Authorization?.split(" ")[1]
 
+    if(!token){
+        return res.status(401).json({
+            message:"Unauthorized access"
+        })
+    }
+    const decoded=jwt.verify(token,process.env.JWT_SECRET)
+    const task=await taskModel.find({user:decoded.userId})
+
+    return res.status(200).json({
+        message:"task are fetched sucessfully",
+        task
+    })
+    }catch(err){
+        return res.status(400).json({
+            message:"Internal server error",
+            err:err.message
+        })
+    }
+}
 
 
 
