@@ -1,11 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const LoginSignUp = () => {
   const [toggle, setToggle] = useState('signup')
 
+  const [data,setData]=useState({
+    name:"",
+    email:"",
+    password:""
+  })
+
+  const handleOnChange=(e)=>{
+    const {value,name}=e.target
+
+    setData((prev)=>({...prev,[name]:value}))
+  }
+
+  useEffect(()=>{
+    console.log(data)
+  })
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(toggle === 'login' ? 'Login Submitted' : 'Signup Submitted')
+    if(toggle === "login"){
+        console.log("login Data",data.email,data.password)
+    }
+    
+    
   }
 
   return (
@@ -42,11 +61,11 @@ const LoginSignUp = () => {
               : 'Create a new account'}
           </p>
 
-          {/* TOGGLE BUTTONS */}
+          {/* toggle buttons */}
           <div className="flex mb-6 bg-gray-200 rounded-full p-1">
             <button
               onClick={() => setToggle('login')}
-              className={`w-1/2 py-2 rounded-full ${
+              className={`w-1/2 py-2 text-blue-800 rounded-full ${
                 toggle === 'login' ? 'bg-white shadow' : ''
               }`}
             >
@@ -54,7 +73,7 @@ const LoginSignUp = () => {
             </button>
             <button
               onClick={() => setToggle('signup')}
-              className={`w-1/2 py-2 rounded-full ${
+              className={`w-1/2 py-2 text-blue-800 rounded-full ${
                 toggle === 'signup' ? 'bg-white shadow' : ''
               }`}
             >
@@ -62,13 +81,16 @@ const LoginSignUp = () => {
             </button>
           </div>
 
-          {/* FORM */}
+          {/* form */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
             {/* Signup only fields */}
-            {toggle === 'signup' && (
+            {toggle === 'signup'&& (
               <input
                 type="text"
+                name="name"
+                value={data.name}
+                onChange={handleOnChange}
                 placeholder="Username"
                 className="border p-2 rounded-md"
                 required
@@ -77,6 +99,9 @@ const LoginSignUp = () => {
 
             <input
               type="email"
+              name="email"
+              value={data.email}
+              onChange={handleOnChange}
               placeholder="Email"
               className="border p-2 rounded-md"
               required
@@ -85,12 +110,15 @@ const LoginSignUp = () => {
             <input
               type="password"
               placeholder="Password"
+              name="password"
+              value={data.password}
+              onChange={handleOnChange}
               className="border p-2 rounded-md"
               required
             />
 
             {/* Submit button */}
-            <button className="bg-blue-600 text-white py-2 rounded-md">
+            <button className="bg-blue-800 text-white py-2 rounded-md">
               {toggle === 'login' ? 'Login' : 'Create Account'}
             </button>
 
