@@ -1,10 +1,12 @@
 import taskModel from "../models/task.model.js"
-
+import mongoose from "mongoose"
 
 const FilterTask=async(req,res,next)=>{
 
     try{
     const {status,priority,title}=req.query
+
+    // console.log(req.user._id)
 
     const allowedStatus=["todo","in-progress","done"]
 
@@ -60,12 +62,34 @@ const FilterTask=async(req,res,next)=>{
 
     const task=await taskModel.find(query).skip(skip).limit(limit).sort({createdAt:-1})
 
+    //fetching and counting the documents from DB using aggreagate functions
+    const stats = await taskModel.aggregate([
+        {
+            $match: {
+            user: req.user._id
+            }
+        },
+        {
+            $group: {
+            _id: "$status",
+            count: { $sum: 1 }
+            }
+        }
+        ]);
+
+    //storing in object to send to frontend
+    const result={}
+
+    stats.forEach((elem)=>{
+        result[elem._id]=elem.count
+    });
+    // console.log(result)
     res.status(200).json({
       message: "Filtered tasks fetched",
       total,totalPages,page,
-      task,
+      task,result
     });
-    
+
 
     }catch(err){
         next(err)
