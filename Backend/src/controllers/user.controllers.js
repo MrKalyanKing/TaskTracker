@@ -53,7 +53,7 @@ const UserRegsiter=async(req,res,next)=>{
 const userLogin=async(req,res,next)=>{
     try{
     const {email,password}=req.body ||{}
-    console.log(email,password)
+    // console.log(email,password)
 
     if(!email,!password){
        const err=new Error("All Fields are required")

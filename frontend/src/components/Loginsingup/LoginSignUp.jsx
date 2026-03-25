@@ -21,16 +21,13 @@ const LoginSignUp = () => {
     setData((prev)=>({...prev,[name]:value}))
   }
 
-  useEffect(()=>{
-    console.log(data)
-  })
+  
 
   const handleSubmit =async (e,req,res) => {
     e.preventDefault()
     try{
     if(toggle === "signup"){
         const res= await axios.post(`${url}/user/register`,data)
-        console.log(res.data)
         navigate('/dashboard')
     }else{
         const {email,password}=data
@@ -40,7 +37,7 @@ const LoginSignUp = () => {
         }
         )
         navigate('/dashboard')
-        console.log("user loggedin")
+        
     }
     }catch(err){
         console.log(err.message)
