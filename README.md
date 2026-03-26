@@ -58,7 +58,7 @@ cd TaskTracker
    ```
 3. Create a `.env` file in the `Backend` directory and define your variables:
    ```env
-   PORT=8000
+   PORT=8000 8080
    MONGODB_URI=your_mongodb_connection_uri
    JWT_SECRET=your_secret_key
    ```
