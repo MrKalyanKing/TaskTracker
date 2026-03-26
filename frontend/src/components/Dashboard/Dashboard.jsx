@@ -10,26 +10,26 @@ const Dashboard = () => {
   return (
     <div className="h-screen flex flex-col">
 
-      {/* NAVBAR (FULL WIDTH) */}
+      {/* Navabr */}
       <div className=''><Navbar /></div>
 
 
 
-      {/* BELOW NAVBAR */}
+      {/* below navabr */}
       <div className=" mt-1 flex flex-1">
 
-        {/* SIDEBAR */}
+        {/* Sidebar */}
         <Sidebar />
 
-        {/* MAIN CONTENT */}
+        {/* main content */}
         <div className="flex-1 bg-gray-100 p-6 overflow-y-auto">
 
-          {/* WORKSPACE HEADER */}
+          {/* workspace header */}
           <div className="flex justify-between items-center mb-6">
             <CreateTask />
           </div>
 
-          {/* FILTER + TASKS */}
+          {/* filter + task */}
           <FilterTask />
 
         </div>

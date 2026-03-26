@@ -90,7 +90,7 @@ const FilterTask = () => {
     <div className="p-6 bg-gray-100 min-h-screen">
 
       {/* Filter Bar */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-3 gap-4 mb-5">
 
         {/* Search */}
         <div className="bg-white p-4 rounded-xl shadow-sm">
@@ -105,13 +105,13 @@ const FilterTask = () => {
           />
         </div>
 
-        {/* STATUS */}
+        {/* Status */}
         <div className="bg-white p-4 rounded-xl shadow-sm flex gap-2">
           {["", "todo", "in-progress", "done"].map((s) => (
             <button
               key={s}
               onClick={() => handleFilter("status", s)}
-              className={`px-3 py-1 rounded-full text-sm cursor-pointer ${filters.status === s
+              className={`px-3 py-1 rounded-full text-[12px] cursor-pointer ${filters.status === s
                 ? "bg-purple-600 text-white"
                 : "bg-gray-100"
                 }`}
@@ -127,7 +127,7 @@ const FilterTask = () => {
             <button
               key={p}
               onClick={() => handleFilter("priority", p)}
-              className={`px-3 py-1 rounded-full text-sm cursor-pointer ${filters.priority === p
+              className={`px-3 py-1 rounded-full text-[12px] cursor-pointer ${filters.priority === p
                 ? "bg-purple-600 text-white"
                 : "bg-gray-100"
                 }`}
@@ -145,7 +145,7 @@ const FilterTask = () => {
           return (
             <div key={t._id} className="bg-white p-5 rounded-xl shadow-sm">
 
-              {/* TAGS */}
+              {/* Tags */}
               <div className="flex gap-2 mb-2">
                 <span className="text-xs px-2 py-1 bg-blue-100 rounded">
                   {t.status}

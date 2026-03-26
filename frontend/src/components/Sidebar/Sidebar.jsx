@@ -28,7 +28,7 @@ const Sidebar = () => {
 
       {/* Title */}
       {!collapsed && (
-        <h1 className="font-bold mb-6">The Atelier</h1>
+        <h1 className="font-bold mb-6">The TaskTracker</h1>
       )}
 
       {/* Menu */}
