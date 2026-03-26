@@ -16,7 +16,7 @@ const Sidebar = () => {
   return (
     <div
       className={`${collapsed ? "w-[80px] flex flex-col items-center" : "w-[250px]"
-        } bg-gray-100 border-r p-4 transition-all duration-300 `}
+        } bg-pink-50 rounded-xl shadow-xl  p-4 transition-all duration-300 `}
     >
       {/* Toggle Button */}
       <button
@@ -40,7 +40,7 @@ const Sidebar = () => {
         </li>
         {/* <Link to="/analytics">  */}
         <li className="flex items-center gap-3 p-2 rounded-md cursor-pointer hover:bg-purple-100 hover:text-purple-600">
-          <Link className="flex gap-3" to="/anal">  <BarChart size={18} />
+          <Link className="flex gap-3" to="/analytics">  <BarChart size={18} />
             {!collapsed && <span>Analytics</span>}</Link>
         </li>
         {/* </Link> */}

@@ -11,11 +11,12 @@ const Dashboard = () => {
     <div className="h-screen flex flex-col">
 
       {/* NAVBAR (FULL WIDTH) */}
-      <Navbar />
-      <hr />
+      <div className=''><Navbar /></div>
+
+
 
       {/* BELOW NAVBAR */}
-      <div className="flex flex-1">
+      <div className=" mt-1 flex flex-1">
 
         {/* SIDEBAR */}
         <Sidebar />
@@ -25,7 +26,7 @@ const Dashboard = () => {
 
           {/* WORKSPACE HEADER */}
           <div className="flex justify-between items-center mb-6">
-            <CreateTask/>
+            <CreateTask />
           </div>
 
           {/* FILTER + TASKS */}
