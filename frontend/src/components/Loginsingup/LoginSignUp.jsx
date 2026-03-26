@@ -29,7 +29,9 @@ const LoginSignUp = () => {
     e.preventDefault()
     try {
       if (toggle === "signup") {
-        const res = await axios.post(`${url}/user/register`, data)
+        const res = await axios.post(`${url}/user/register`, data, {
+          withCredentials: true
+        })
         if (res.data.token) {
           setIsAuthenticated(true)
           toast.success("Account created successfully!")
