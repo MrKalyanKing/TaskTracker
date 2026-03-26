@@ -140,41 +140,50 @@ const FilterTask = () => {
 
       {/* Task list */}
       <div className="grid grid-cols-3 gap-4">
-        {task.map((t) => (
-          <div key={t._id} className="bg-white p-5 rounded-xl shadow-sm">
+        {task.map((t) => {
+          const isDone = t.status === 'done'
+          return (
+            <div key={t._id} className="bg-white p-5 rounded-xl shadow-sm">
 
-            {/* TAGS */}
-            <div className="flex gap-2 mb-2">
-              <span className="text-xs px-2 py-1 bg-blue-100 rounded">
-                {t.status}
-              </span>
-              <span className="text-xs px-2 py-1 bg-red-100 rounded">
-                {t.priority}
-              </span>
-            </div>
+              {/* TAGS */}
+              <div className="flex gap-2 mb-2">
+                <span className="text-xs px-2 py-1 bg-blue-100 rounded">
+                  {t.status}
+                </span>
+                <span className="text-xs px-2 py-1 bg-red-100 rounded">
+                  {t.priority}
+                </span>
+              </div>
 
-            <h2 className="font-semibold">{t.title}</h2>
-            <p className="text-sm text-gray-500">{t.description}</p>
+              <h2
+                className={`font-semibold 
+              ${isDone ? "line-through text-gray-500" : ""}`}
+              >
+                {t.title}
+              </h2>
+              <p className="text-sm text-gray-500">{t.description}</p>
 
-            {/* Action */}
-            <div className="flex justify-between items-center mt-3">
-              <p className="text-xs text-gray-400">
-                {new Date(t.dueDate).toDateString()}
-              </p>
+              {/* Action */}
+              <div className="flex justify-between items-center mt-3">
+                <p className="text-xs text-gray-400">
+                  {new Date(t.dueDate).toDateString()}
+                </p>
 
-              <div className="flex gap-2">
-                {/* Edit */}
+                <div className="flex gap-2">
+                  {/* Edit */}
 
-                <button onClick={() => handleEdit(t)} className="text-blue-500 cursor-pointer"><SquarePen /></button>
+                  {!isDone ? <button onClick={() => handleEdit(t)} className="text-blue-500 cursor-pointer"><SquarePen /></button> : ""}
 
-                {/* Delete */}
-                <button onClick={() => { deleteTask(t) }} className="text-red-500 cursor-pointer"><Trash /></button>
-                {/* Marks As Complete */}
-                <button onClick={() => { MarkComplete(t) }} className=" bg-blue-800 w-20 rounded-md cursor-pointer flex text-white h-7 items-center justify-center text-sm"> <BookmarkCheck /> Mark</button>
+                  {/* Delete */}
+                  {!isDone ? <button onClick={() => { deleteTask(t) }} className="text-red-500 cursor-pointer"><Trash /></button> : ""}
+                  {/* Marks As Complete */}
+                  {!isDone ? <button onClick={() => { MarkComplete(t) }} className=" bg-blue-800 w-20 rounded-md cursor-pointer flex text-white h-7 items-center justify-center text-sm"> <BookmarkCheck /> Mark</button> : ""}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
+
       </div>
 
       {/* Pagination */}
