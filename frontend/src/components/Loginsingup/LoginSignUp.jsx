@@ -7,49 +7,49 @@ import { useNavigate } from 'react-router-dom'
 const LoginSignUp = () => {
   const [toggle, setToggle] = useState('signup')
 
-  const url=useContext(AppContext)
-  const navigate=useNavigate()
-  const [data,setData]=useState({
-    name:"",
-    email:"",
-    password:""
+  const { url } = useContext(AppContext)
+  const navigate = useNavigate()
+  const [data, setData] = useState({
+    name: "",
+    email: "",
+    password: ""
   })
 
-  const handleOnChange=(e)=>{
-    const {value,name}=e.target
+  const handleOnChange = (e) => {
+    const { value, name } = e.target
 
-    setData((prev)=>({...prev,[name]:value}))
+    setData((prev) => ({ ...prev, [name]: value }))
   }
 
-  
 
-  const handleSubmit =async (e,req,res) => {
+
+  const handleSubmit = async (e, req, res) => {
     e.preventDefault()
-    try{
-    if(toggle === "signup"){
-        const res= await axios.post(`${url}/user/register`,data)
+    try {
+      if (toggle === "signup") {
+        const res = await axios.post(`${url}/user/register`, data)
         navigate('/dashboard')
-    }else{
-        const {email,password}=data
-        const res=await axios.post(`${url}/user/login`,{email,password},
-        {
-            withCredentials:true
-        }
+      } else {
+        const { email, password } = data
+        const res = await axios.post(`${url}/user/login`, { email, password },
+          {
+            withCredentials: true
+          }
         )
         navigate('/dashboard')
-        
+
+      }
+    } catch (err) {
+      console.log(err.message)
     }
-    }catch(err){
-        console.log(err.message)
-    }
-    
+
   }
 
   return (
     <div className="h-screen flex items-center justify-center bg-gray-100">
-      
+
       <div className="grid grid-cols-2 w-[900px] shadow-lg rounded-xl overflow-hidden">
-        
+
         {/* LEFT SECTION */}
         <div className="flex flex-col justify-center items-center p-8 bg-pink-100">
           <h1 className="font-bold text-2xl mb-4">Task Manager</h1>
@@ -83,17 +83,15 @@ const LoginSignUp = () => {
           <div className="flex mb-6 bg-gray-200 rounded-full p-1">
             <button
               onClick={() => setToggle('login')}
-              className={`w-1/2 py-2 text-blue-800 rounded-full ${
-                toggle === 'login' ? 'bg-white shadow' : ''
-              }`}
+              className={`w-1/2 py-2 text-blue-800 rounded-full ${toggle === 'login' ? 'bg-white shadow' : ''
+                }`}
             >
               Login
             </button>
             <button
               onClick={() => setToggle('signup')}
-              className={`w-1/2 py-2 text-blue-800 rounded-full ${
-                toggle === 'signup' ? 'bg-white shadow' : ''
-              }`}
+              className={`w-1/2 py-2 text-blue-800 rounded-full ${toggle === 'signup' ? 'bg-white shadow' : ''
+                }`}
             >
               Sign Up
             </button>
@@ -103,7 +101,7 @@ const LoginSignUp = () => {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
             {/* Signup only fields */}
-            {toggle === 'signup'&& (
+            {toggle === 'signup' && (
               <input
                 type="text"
                 name="name"

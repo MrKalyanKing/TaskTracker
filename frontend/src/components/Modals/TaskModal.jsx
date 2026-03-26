@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 const TaskModal = ({ onClose, task }) => {
 
-  const url = useContext(AppContext)
+  const { url } = useContext(AppContext)
   const [formData, setFormData] = useState({
     title: "",
     description: "",

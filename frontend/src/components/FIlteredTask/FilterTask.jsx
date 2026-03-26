@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import TaskModal from "../Modals/TaskModal";
 import { BookmarkCheck, SquarePen, Trash } from 'lucide-react';
+import { AppContext } from "../Context/Context";
 
 const FilterTask = () => {
   const [task, setTask] = useState([]);
@@ -16,7 +17,7 @@ const FilterTask = () => {
     priority: ""
   });
 
-  const url = "http://localhost:8000/api";
+  const { url } = useContext(AppContext)
 
 
   const fetchTasks = async () => {

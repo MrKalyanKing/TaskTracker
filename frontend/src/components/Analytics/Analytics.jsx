@@ -25,7 +25,7 @@ ChartJS.register(
 );
 
 const Analytics = () => {
-    const url = useContext(AppContext);
+    const { url } = useContext(AppContext);
 
     const [stats, setStats] = useState({});
     const [trend, setTrend] = useState([]);

@@ -1,8 +1,15 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Bell, BookCheck, Settings } from "lucide-react"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { AppContext } from '../Context/Context'
 const Navbar = () => {
     const [showlogout, setShowlogout] = useState(false)
+    const { logout } = useContext(AppContext)
+    const navigate = useNavigate()
+    const handleLogout = async () => {
+        await logout()
+        navigate("/")
+    }
     return (
         <div className='bg-gray-100 flex justify-between items-center p-5 rounded-xl shadow-md'>
             <div className='flex items-center gap-4'>
@@ -27,7 +34,7 @@ const Navbar = () => {
                         />
                         {showlogout && (
                             <div className='bg-gray-300 mt-3  w-14 h-8 flex items-center justify-center rounded-sm '>
-                                <button className="text-sm  cursor-pointer text-gray-700 z-10 ">Logout</button>
+                                <button onClick={handleLogout} className="text-sm  cursor-pointer text-gray-700 z-10 ">Logout</button>
                             </div>
                         )}
                     </li>
