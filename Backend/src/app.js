@@ -5,7 +5,9 @@ import taskRouter from "./routes/task.route.js";
 import filterRouter from "./routes/filter.route.js";
 import cors from "cors"
 import analyticsRouter from "./routes/analytics.route.js";
+import dotenv from "dotenv"
 
+dotenv.config()
 const app = express()
 
 //middlewares
@@ -17,6 +19,8 @@ app.use(cors({
 
 }
 ))
+
+console.log("Backend URL:", process.env.FRONTEND_URL)
 
 
 //user routes
