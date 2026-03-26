@@ -4,8 +4,9 @@ import cookieParser from "cookie-parser";
 import taskRouter from "./routes/task.route.js";
 import filterRouter from "./routes/filter.route.js";
 import cors from "cors"
+import analyticsRouter from "./routes/analytics.route.js";
 
-const app=express()
+const app = express()
 
 //middlewares
 app.use(express.json())
@@ -18,11 +19,13 @@ app.use(cors({
 
 //user routes
 
-app.use("/api/user",userRouter)
+app.use("/api/user", userRouter)
 
-app.use("/api/task",taskRouter)
+app.use("/api/task", taskRouter)
 
-app.use("/api/",filterRouter)
+app.use("/api/", filterRouter)
+
+app.use("/api", analyticsRouter)
 
 
 //global middleware error handling
@@ -38,7 +41,7 @@ app.use((err, req, res, next) => {
 
 
 
-app.get('/',(req,res)=>{
-    res.send("Hello")
+app.get('/', (req, res) => {
+  res.send("Hello")
 })
 export default app;
