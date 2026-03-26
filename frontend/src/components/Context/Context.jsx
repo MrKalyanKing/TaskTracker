@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const AppContext = createContext();
 
@@ -34,8 +35,10 @@ export const CreateContext = ({ children }) => {
       });
 
       setIsAuthenticated(false);
+      toast.success("Logged out successfully!");
     } catch (err) {
       console.log(err.message);
+      toast.error("Logout failed!");
     }
   };
 

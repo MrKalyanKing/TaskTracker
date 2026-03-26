@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useContext, useState } from "react";
 import { AppContext } from "../Context/Context";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const TaskModal = ({ onClose, task }) => {
 
@@ -34,6 +35,7 @@ const TaskModal = ({ onClose, task }) => {
           { withCredentials: true }
         );
         console.log("Updated:", res.data);
+        toast.success("Task updated successfully!");
       } else {
 
         const res = await axios.post(
@@ -42,9 +44,11 @@ const TaskModal = ({ onClose, task }) => {
           { withCredentials: true }
         );
         console.log("Created:", res.data);
+        toast.success("Task created successfully!");
       }
     } catch (err) {
       console.log(err.message);
+      toast.error(err.response?.data?.message || "Failed to save task!");
     }
 
     onClose();
@@ -69,10 +73,10 @@ const TaskModal = ({ onClose, task }) => {
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-      {/* MODAL BOX */}
+      {/* modal box */}
       <div className="bg-white w-[400px] rounded-xl p-6 shadow-lg">
 
-        {/* HEADER */}
+
         <div className="flex justify-between items-center mb-4">
           <h2 className="font-semibold text-lg">Task Details</h2>
           <button onClick={onClose}>✕</button>
@@ -80,7 +84,7 @@ const TaskModal = ({ onClose, task }) => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
 
-          {/* TITLE */}
+
           <div>
             <label className="text-xs text-gray-500">TASK TITLE</label>
             <input
@@ -91,7 +95,7 @@ const TaskModal = ({ onClose, task }) => {
             />
           </div>
 
-          {/* DESCRIPTION */}
+
           <div>
             <label className="text-xs text-gray-500">DESCRIPTION</label>
             <textarea
@@ -102,7 +106,7 @@ const TaskModal = ({ onClose, task }) => {
             />
           </div>
 
-          {/* STATUS + PRIORITY */}
+
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="text-xs text-gray-500">STATUS</label>
@@ -133,7 +137,7 @@ const TaskModal = ({ onClose, task }) => {
             </div>
           </div>
 
-          {/* DATE */}
+          {/* Date */}
           <div>
             <label className="text-xs text-gray-500">DUE DATE</label>
             <input
@@ -145,7 +149,7 @@ const TaskModal = ({ onClose, task }) => {
             />
           </div>
 
-          {/* ACTIONS */}
+          {/* Actions */}
           <div className="flex justify-between items-center mt-4">
             <button
               type="submit"

@@ -3,6 +3,7 @@ import axios from "axios";
 import TaskModal from "../Modals/TaskModal";
 import { BookmarkCheck, SquarePen, Trash } from 'lucide-react';
 import { AppContext } from "../Context/Context";
+import { toast } from "react-toastify";
 
 const FilterTask = () => {
   const [task, setTask] = useState([]);
@@ -49,8 +50,11 @@ const FilterTask = () => {
         withCredentials: true
       })
       console.log("data deleted", res.data)
+      toast.success("Task deleted successfully!");
+      fetchTasks(); // Refresh list
     } catch (err) {
       console.log(err.response?.data || err.message)
+      toast.error("Failed to delete task!");
     }
   }
 
@@ -63,8 +67,11 @@ const FilterTask = () => {
           withCredentials: true
         }
       )
+      toast.success("Task marked as completed!");
+      fetchTasks(); // Refresh list
     } catch (err) {
       console.log(err.response?.data || err.message)
+      toast.error("Failed to mark task as completed!");
     }
   }
 

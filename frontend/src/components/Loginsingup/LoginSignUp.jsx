@@ -3,6 +3,7 @@ import { useContext } from 'react'
 import { AppContext } from '../Context/Context'
 import axios from "axios"
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const LoginSignUp = () => {
   const [toggle, setToggle] = useState('signup')
@@ -30,6 +31,7 @@ const LoginSignUp = () => {
         const res = await axios.post(`${url}/user/register`, data)
         if (res.data.token) {
           setIsAuthenticated(true)
+          toast.success("Account created successfully!")
           navigate('/dashboard')
         }
       } else {
@@ -41,12 +43,14 @@ const LoginSignUp = () => {
         )
         if (res.data.token) {
           setIsAuthenticated(true)
+          toast.success("Logged in successfully!")
           navigate('/dashboard')
         }
 
       }
     } catch (err) {
       console.log(err.message)
+      toast.error(err.response?.data?.message || "Authentication failed!")
     }
 
   }
@@ -56,12 +60,12 @@ const LoginSignUp = () => {
 
       <div className="grid grid-cols-2 w-[900px] shadow-lg rounded-xl overflow-hidden">
 
-        {/* LEFT SECTION */}
+
         <div className="flex flex-col justify-center items-center p-8 bg-pink-100">
           <h1 className="font-bold text-2xl mb-4">Task Manager</h1>
 
           <p className="font-bold text-2xl text-center">
-            The Digital Atelier for High Focus Teams
+            The Digital Task Tracker for High Focused Teams
           </p>
 
           <p className="text-gray-500 text-center mt-3">
@@ -70,7 +74,7 @@ const LoginSignUp = () => {
 
           <img
             className="rounded-md mt-6 w-48"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUCu_3b7my9oq2TW__GAEnz8FH30f9A5jH5uAZnFooGBbg8rp-lZlUJNV3W6mgsrhdeMWDQD2mapcgVRprwGk0ggB5UVveK9vhNuKiI0yG6b6xkOgibgerpk3uwcH1Ap0-sqKy7TV9ekcrQj-JN7tzFCY0o7DBq1lP7WhVUuDbPzikoYlc01s2r0y4KphTL33dnjHn3qwSYXnOb_Ovy3pX7V4cjWPEHDtiSZmVnOz7bV3Xzsh05F54g1ySRZmTSvbl4SWpx6gLs3Tf"
+            src="https://img.freepik.com/free-vector/blogging-isometric-concept-with-content-plan-making-process-3d-illustration_1284-55140.jpg?semt=ais_hybrid&w=740&q=80"
             alt=""
           />
         </div>
