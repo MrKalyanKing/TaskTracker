@@ -32,7 +32,13 @@ const FilterTask = () => {
           priority: filters.priority
         },
         withCredentials: true
-      });
+      },
+      {
+         headers: {
+    Authorization: `Bearer ${token}`
+  }
+      }
+    );
 
       setTask(res.data.tasks);
       setTotalPages(res.data.totalPages);

@@ -59,7 +59,12 @@ const Analytics = () => {
 
             const res = await axios.get(`${url}/analytics?${query}`, {
                 withCredentials: true,
-            });
+            },{
+                 headers: {
+    Authorization: `Bearer ${token}`
+  }
+            }
+        );
 
 
             setStats(res.data.stats || {});

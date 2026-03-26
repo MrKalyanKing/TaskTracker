@@ -16,6 +16,7 @@ const LoginSignUp = () => {
     password: ""
   })
 
+
   const handleOnChange = (e) => {
     const { value, name } = e.target
 
