@@ -1,6 +1,5 @@
 import validator from "validator"
 import userModel from "../models/user.model.js"
-import cookie from "cookie-parser"
 import jwt from "jsonwebtoken"
 
 const UserRegsiter = async (req, res, next) => {

@@ -32,12 +32,8 @@ const FilterTask = () => {
           priority: filters.priority
         },
         withCredentials: true
-      },
-      {
-         headers: {
-    Authorization: `Bearer ${token}`
-  }
       }
+      
     );
 
       setTask(res.data.tasks);
@@ -98,7 +94,7 @@ const FilterTask = () => {
 
 
   }
-  console.log(selectedtask)
+  
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">

@@ -55,14 +55,10 @@ const Analytics = () => {
 
             const query = new URLSearchParams(customfilter).toString();
 
-            console.log("URL:", `${url}/analytics?${query}`);
+            
 
             const res = await axios.get(`${url}/analytics?${query}`, {
                 withCredentials: true,
-            },{
-                 headers: {
-    Authorization: `Bearer ${token}`
-  }
             }
         );
 
@@ -76,7 +72,7 @@ const Analytics = () => {
         setLoading(false)
     };
 
-    console.log(filters)
+    
     useEffect(() => {
         fetchAnalytics();
     }, []);

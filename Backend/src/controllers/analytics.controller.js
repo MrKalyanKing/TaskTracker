@@ -5,7 +5,7 @@ export const getTaskAnalytics = async (req, res, next) => {
     try {
         const { from, to } = req.query;
 
-        console.log(from, to)
+        
         const matchStage = {
             user: req.user._id,
         };
