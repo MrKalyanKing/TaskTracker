@@ -7,18 +7,18 @@ import {
   Menu
 } from "lucide-react"
 import TaskModal from "../Modals/TaskModal";
+import { Link } from "react-router-dom"
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false)
-   const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <div
-      className={`${
-        collapsed ? "w-[80px]" : "w-[250px]"
-      } bg-gray-100 border-r p-4 transition-all duration-300`}
+      className={`${collapsed ? "w-[80px] flex flex-col items-center" : "w-[250px]"
+        } bg-gray-100 border-r p-4 transition-all duration-300 `}
     >
-      {/* TOGGLE BUTTON */}
+      {/* Toggle Button */}
       <button
         onClick={() => setCollapsed(!collapsed)}
         className="mb-6"
@@ -26,42 +26,42 @@ const Sidebar = () => {
         <Menu />
       </button>
 
-      {/* TITLE */}
+      {/* Title */}
       {!collapsed && (
         <h1 className="font-bold mb-6">The Atelier</h1>
       )}
 
-      {/* MENU */}
+      {/* Menu */}
       <ul className="space-y-4 text-gray-600">
 
-        <li className="flex items-center gap-3 bg-purple-100 text-purple-600 p-2 rounded-md cursor-pointer">
+        <li className=" flex items-center gap-3  p-2 rounded-md cursor-pointer bg-purple-100 text-purple-600 hover:bg-purple-100 hover:text-purple-600">
           <LayoutDashboard size={18} />
           {!collapsed && <span>Dashboard</span>}
         </li>
-
-        <li className="flex items-center gap-3 cursor-pointer">
-          <BarChart size={18} />
-          {!collapsed && <span>Analytics</span>}
+        {/* <Link to="/analytics">  */}
+        <li className="flex items-center gap-3 p-2 rounded-md cursor-pointer hover:bg-purple-100 hover:text-purple-600">
+          <Link className="flex gap-3" to="/anal">  <BarChart size={18} />
+            {!collapsed && <span>Analytics</span>}</Link>
         </li>
+        {/* </Link> */}
 
-        <li className="flex items-center gap-3 cursor-pointer">
+        <li className="flex items-center gap-3 p-2 rounded-md cursor-pointer hover:bg-purple-100 hover:text-purple-600">
           <Folder size={18} />
           {!collapsed && <span>Projects</span>}
         </li>
 
-        <li className="flex items-center gap-3 cursor-pointer">
+        <li className="flex items-center gap-3 p-2 rounded-md cursor-pointer hover:bg-purple-100 hover:text-purple-600">
           <CheckSquare size={18} />
           {!collapsed && <span>Tasks</span>}
         </li>
 
       </ul>
 
-      {/* BUTTON */}
+      {/* Button */}
       <button
-        onClick={()=>setOpen(true)}
-        className={`mt-10 w-full bg-purple-600 text-white py-2 rounded-md ${
-          collapsed ? "px-2" : ""
-        }`}
+        onClick={() => setOpen(true)}
+        className={`mt-10 w-full bg-purple-400 cursor-pointer text-white py-2 rounded-md ${collapsed ? "px-2" : ""
+          }`}
       >
         {collapsed ? "+" : "+ Create New Task"}
       </button>

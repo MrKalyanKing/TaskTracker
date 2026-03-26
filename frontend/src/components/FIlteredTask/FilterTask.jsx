@@ -53,6 +53,20 @@ const FilterTask = () => {
     }
   }
 
+  //Marking the task as complete API
+  const stat = { status: "done" }
+  const MarkComplete = async (task) => {
+    try {
+      const res = await axios.patch(`${url}/task/update/${task._id}`, stat,
+        {
+          withCredentials: true
+        }
+      )
+    } catch (err) {
+      console.log(err.response?.data || err.message)
+    }
+  }
+
   useEffect(() => {
     fetchTasks();
   }, [page, filters]);
@@ -156,7 +170,7 @@ const FilterTask = () => {
                 {/* Delete */}
                 <button onClick={() => { deleteTask(t) }} className="text-red-500 cursor-pointer"><Trash /></button>
                 {/* Marks As Complete */}
-                <button className=" bg-blue-800 w-20 rounded-md cursor-pointer flex text-white h-7 items-center justify-center text-sm"> <BookmarkCheck /> Mark</button>
+                <button onClick={() => { MarkComplete(t) }} className=" bg-blue-800 w-20 rounded-md cursor-pointer flex text-white h-7 items-center justify-center text-sm"> <BookmarkCheck /> Mark</button>
               </div>
             </div>
           </div>
