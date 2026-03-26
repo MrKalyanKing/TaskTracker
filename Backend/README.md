@@ -1,87 +1,140 @@
-# Task Tracker - Backend Documentation
+# TaskTracker Backend API Documentation
 
-This is the robust backend for the Task Tracker application, built using Node.js, Express, and MongoDB. It provides a full suite of APIs for user management, task orchestration, and advanced filtering.
+Welcome to the TaskTracker Backend API. This service handles user authentication, task management, analytics, and advanced filtering.
 
-## 🚀 Tech Stack
+## Base URL
+`http://localhost:8000/api`
 
-- **Runtime**: Node.js
-- **Framework**: Express.js
-- **Database**: MongoDB (Mongoose ODM)
-- **Authentication**: JSON Web Tokens (JWT) & HTTP-only Cookies
-- **Validation**: Validator.js & Mongoose Schemas
+## Authentication
+Most routes are protected by `authMiddleware`. Authentication is handled via JWT stored in an `httpOnly` cookie named `token` or passed via the `Authorization` header.
 
 ---
 
-## 🛠️ Middleware
+## API Routes
 
-### Authentication Middleware (`authMiddleware`)
-Located in `src/middlewares/Auth.middleware.js`, this is the primary security gatekeeper for protected routes.
-- **Workflow**: 
-  1. Extracts the token from `req.cookies.token` or the `Authorization` header (`Bearer <token>`).
-  2. Verifies the token using the `JWT_SECRET`.
-  3. Fetches the corresponding user from the database.
-  4. Attaches the user object to `req.user` for subsequent route handlers.
-- **Failure**: Returns `401 Unauthorized` if the token is missing or compromised.
+### User Routes (`/user`)
 
----
+#### 1. Register User
+- **URL**: `/register`
+- **Method**: `POST`
+- **Body**: `{ name, email, password }`
+- **Functionality**: Creates a new user account and sets an auth cookie.
+- **Edge Cases**:
+  - Missing fields (400 Bad Request)
+  - Invalid email format (400 Bad Request)
+  - User already exists (200 Success - returns existing user status)
 
-## 🚦 API Route Catalog
+#### 2. Login User
+- **URL**: `/login`
+- **Method**: `POST`
+- **Body**: `{ email, password }`
+- **Functionality**: Authenticates user and sets an auth cookie.
+- **Edge Cases**:
+  - Missing fields (400 Bad Request)
+  - User not found (409 Conflict - *Note: Backend implementation error reports "Already Exists"*)
+  - Invalid password (400 Bad Request)
 
-### 1. User Authentication (`/api/user`)
+#### 3. Logout User
+- **URL**: `/logout`
+- **Method**: `POST`
+- **Functionality**: Clears the authentication cookie.
+- **Edge Cases**: Always returns success after clearing the cookie.
 
-| Method | Endpoint | Features & Allocated Tasks |
-| :--- | :--- | :--- |
-| `POST` | `/register` | **User Onboarding**: Validates email format and existence. Hashes passwords (via model hooks). Issues a JWT set in a secure cookie upon success. |
-| `POST` | `/login` | **Secure Access**: Protected by `authMiddleware`. Compares credentials against the database. Issues a fresh JWT for the session. |
-
-### 2. Task Management (`/api/task`)
-
-All task routes are protected by `authMiddleware`.
-
-| Method | Endpoint | Features & Allocated Tasks |
-| :--- | :--- | :--- |
-| `POST` | `/create/task` | **Creation Engine**: Validates `title`, `description`, `status` (todo/in-progress/done), and `priority` (low/medium/high). Links the task to the authenticated user. |
-| `PATCH` | `/update/:id` | **Atomic Updates**: Allows partial updates to any task field by ID. Validates MongoDB ObjectId format before processing. |
-| `DELETE` | `/delete/:id` | **Task Cleanup**: Permanently removes a task from the system after validating the provided ID. |
-| `GET` | `/view` | **Paginated Retrieval**: Fetches all tasks for the current user. Supports `page` and `limit` query parameters. Sorts by `createdAt` in descending order. |
-
-### 3. Advanced Filtering (`/api/filter`)
-
-| Method | Endpoint | Features & Allocated Tasks |
-| :--- | :--- | :--- |
-| `GET` | `/filter` | **Dynamic Querying**: Allows filtering tasks by `status`, `priority`, and `title` (regex-based). Includes pagination logic and an aggregation pipeline to track task statistics. |
+#### 4. Get Current User
+- **URL**: `/getuser`
+- **Method**: `GET`
+- **Auth Required**: Yes
+- **Functionality**: Returns the current authenticated user's ID.
 
 ---
 
-## 🔍 Implementation Details
+### Task Routes (`/task`)
 
-### Validation Rules
-The system enforces strict data integrity:
-- **Status**: Must be one of `todo`, `in-progress`, or `done`.
-- **Priority**: Must be one of `low`, `medium`, or `high`.
-- **Email**: Must pass `validator.isEmail` checks during registration.
+#### 1. Create Task
+- **URL**: `/create`
+- **Method**: `POST`
+- **Auth Required**: Yes
+- **Body**: `{ title, description, status, priority, dueDate }`
+- **Functionality**: Creates a task linked to the authenticated user.
+- **Edge Cases**:
+  - Missing fields (400 Bad Request)
+  - Invalid `status` (Must be: `todo`, `in-progress`, `done`)
+  - Invalid `priority` (Must be: `low`, `medium`, `high`)
 
-### Pagination Logic
-Both `/view` and `/filter` routes implement standard Skip-Limit pagination:
-- Default limit is capped to prevent server overload (e.g., max 40 for view, max 20 for filter).
-- Returns `total` results and `totalPages` for frontend consumption.
+#### 2. Update Task
+- **URL**: `/update/:id`
+- **Method**: `PATCH`
+- **Auth Required**: Yes
+- **Body**: Partial Task Object
+- **Functionality**: Updates an existing task by ID.
+- **Edge Cases**:
+  - Invalid MongoDB ID (400 Bad Request)
+  - Task not found (404 Not Found)
+  - *Warning: Ownership check is currently missing in implementation.*
 
-### Error Handling
-A global error handling middleware in `app.js` catches all `next(err)` calls, ensuring consistent JSON error responses with appropriate HTTP status codes.
+#### 3. Delete Task
+- **URL**: `/delete/:id`
+- **Method**: `DELETE`
+- **Auth Required**: Yes
+- **Functionality**: Permanently deletes a task.
+- **Edge Cases**:
+  - Invalid MongoDB ID (400 Bad Request)
+
+#### 4. View All Tasks
+- **URL**: `/view`
+- **Method**: `GET`
+- **Auth Required**: Yes
+- **Query Params**: `page`, `limit`
+- **Functionality**: Returns a paginated list of tasks for the current user.
+- **Edge Cases**:
+  - Invalid page/limit (400 Bad Request)
+  - Unauthorized access (401 Unauthorized)
 
 ---
 
-## ⚙️ Environment Configuration
+### Filter Routes (`/filter`)
 
-Ensure your `.env` file contains:
-```env
-PORT=5000
-MONGODB_URI=your_mongodb_connection_uri
-JWT_SECRET=your_super_secret_key
-```
+#### 1. Advanced Task Filter
+- **URL**: `/filter`
+- **Method**: `GET`
+- **Auth Required**: Yes
+- **Query Params**: `status`, `priority`, `title`, `page`, `limit`
+- **Functionality**: Filters tasks by multiple criteria with case-insensitive regex support. Returns tasks and summary statistics.
+- **Edge Cases**:
+  - Invalid status/priority (400 Bad Request)
+  - Invalid pagination parameters (400 Bad Request)
 
-## 🏃 Getting Started
+---
 
-1. **Install**: `npm install`
-2. **Setup**: Configure your `.env` file.
-3. **Run**: `npm start`
+### Analytics Routes (`/analytics`)
+
+#### 1. Task Analytics
+- **URL**: `/analytics`
+- **Method**: `GET`
+- **Auth Required**: Yes
+- **Query Params**: `from`, `to` (ISO dates)
+- **Functionality**: Provides task distribution stats and daily trends within a date range.
+- **Edge Cases**:
+  - Invalid date format (May result in invalid MongoDB aggregation match)
+
+---
+
+## Global Middleware & Error Handling
+
+### 1. Auth Middleware
+- Extracts token from cookies or `Authorization` header.
+- Verifies JWT using `JWT_SECRET`.
+- Attaches `user` object to `req`.
+- Returns `401 Unauthorized` if token is missing or invalid.
+
+### 2. Error Handler
+- Catches all passed errors via `next(err)`.
+- Returns JSON response with `success: false` and the error message.
+- Defaults to `500 Internal Server Error` if no status is provided.
+
+## Tech Stack
+- **Node.js** & **Express**
+- **MongoDB** (Mongoose ODM)
+- **JWT** (Authentication)
+- **Validator** (Input validation)
+- **Cookie-Parser** (Cookie management)
