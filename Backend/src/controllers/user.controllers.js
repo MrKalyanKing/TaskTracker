@@ -103,11 +103,9 @@ const userLogin = async (req, res, next) => {
 
 const userLogout = async (req, res, next) => {
     try {
-        if (req.cookies.token) {
-            res.clearCookie("token", {
-                httpOnly: true,
-            });
-        }
+        res.clearCookie("token", {
+            httpOnly: true,
+        });
 
         return res.status(200).json({
             success: true,

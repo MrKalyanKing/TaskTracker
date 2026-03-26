@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import axios from "axios";
 
 export const AppContext = createContext();
 
@@ -28,9 +29,9 @@ export const CreateContext = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post(`${url}/user/logout`,
-        { withCredentials: true }
-      );
+      await axios.post(`${url}/user/logout`, {}, {
+        withCredentials: true,
+      });
 
       setIsAuthenticated(false);
     } catch (err) {

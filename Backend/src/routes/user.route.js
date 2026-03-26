@@ -8,7 +8,7 @@ userRouter.post('/register', UserRegsiter)
 
 userRouter.post("/login", userLogin)
 
-userRouter.post("/logout", authMiddleware, userLogout)
+userRouter.post("/logout", userLogout)
 
 
 userRouter.get('/getuser', authMiddleware, getUser)

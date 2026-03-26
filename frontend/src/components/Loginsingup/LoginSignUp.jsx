@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 const LoginSignUp = () => {
   const [toggle, setToggle] = useState('signup')
 
-  const { url } = useContext(AppContext)
+  const { url, setIsAuthenticated } = useContext(AppContext)
   const navigate = useNavigate()
   const [data, setData] = useState({
     name: "",
@@ -28,7 +28,10 @@ const LoginSignUp = () => {
     try {
       if (toggle === "signup") {
         const res = await axios.post(`${url}/user/register`, data)
-        navigate('/dashboard')
+        if (res.data.token) {
+          setIsAuthenticated(true)
+          navigate('/dashboard')
+        }
       } else {
         const { email, password } = data
         const res = await axios.post(`${url}/user/login`, { email, password },
@@ -36,7 +39,10 @@ const LoginSignUp = () => {
             withCredentials: true
           }
         )
-        navigate('/dashboard')
+        if (res.data.token) {
+          setIsAuthenticated(true)
+          navigate('/dashboard')
+        }
 
       }
     } catch (err) {
