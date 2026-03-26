@@ -1,10 +1,11 @@
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { AppContext } from "../Context/Context";
+import { useEffect } from "react";
 
-const TaskModal = ({ onClose }) => {
+const TaskModal = ({ onClose, task }) => {
 
-  const url=useContext(AppContext)
+  const url = useContext(AppContext)
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -21,22 +22,49 @@ const TaskModal = ({ onClose }) => {
     }));
   };
 
-  const handleSubmit =async (e,req,res) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    try{
-        const res=await axios.post(`${url}/task/create`,formData,{
-            withCredentials:true
-        })
-        console.log(res.data)
-    }catch(err){
-        console.log(err.message)
+
+    try {
+      if (task) {
+
+        const res = await axios.patch(
+          `${url}/task/update/${task._id}`,
+          formData,
+          { withCredentials: true }
+        );
+        console.log("Updated:", res.data);
+      } else {
+
+        const res = await axios.post(
+          `${url}/task/create`,
+          formData,
+          { withCredentials: true }
+        );
+        console.log("Created:", res.data);
+      }
+    } catch (err) {
+      console.log(err.message);
     }
-
-
 
     onClose();
   };
+
+  //Fetching the data from DB for Update
+  useEffect(() => {
+    if (task) {
+      setFormData({
+        title: task.title || "",
+        description: task.description || "",
+        status: task.status || "todo",
+        priority: task.priority || "high",
+        dueDate: task.dueDate?.split("T")[0] || "",
+
+      })
+    }
+  }, [task])
+
+  console.log(formData)
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
