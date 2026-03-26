@@ -9,7 +9,7 @@ TaskTracker is a professional-grade full-stack task management application desig
 ### Frontend
 - **Framework**: [React 19](https://react.dev/) (Vite)
 - **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
-- **State Management**: React Context API
+
 - **Icons**: [Lucide React](https://lucide.dev/)
 - **Charts**: [Chart.js](https://www.chartjs.org/) & [react-chartjs-2](https://react-chartjs-2.js.org/)
 - **Notifications**: [React Toastify](https://fkhadra.github.io/react-toastify/)
