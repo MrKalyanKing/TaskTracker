@@ -5,13 +5,14 @@ export const getTaskAnalytics = async (req, res, next) => {
     try {
         const { from, to } = req.query;
 
+        console.log(from, to)
         const matchStage = {
             user: req.user._id,
         };
 
         // date filter
         if (from && to) {
-            matchStage.createdAt = {
+            matchStage.dueDate = {
                 $gte: new Date(from),
                 $lte: new Date(to),
             };
